@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HormigasAIS Bot • Infraestructura Inteligente en el Borde</title>
+    <style>
+        :root {
+            --bg-color: #0a0d12;
+            --card-bg: #121824;
+            --accent-color: #00ff88;
+            --text-color: #e2e8f0;
+            --text-dim: #94a3b8;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        header {
+            text-align: center;
+            padding: 4rem 1rem 2rem;
+            max-width: 800px;
+        }
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+        p.subtitle {
+            font-size: 1.2rem;
+            color: var(--text-dim);
+        }
+        .btn-add {
+            display: inline-block;
+            background: var(--accent-color);
+            color: #000;
+            padding: 0.8rem 1.8rem;
+            font-weight: bold;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 1.5rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-add:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(0, 255, 136, 0.4);
+        }
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            max-width: 1000px;
+            width: 90%;
+            margin: 3rem 0;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .card h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+        }
+        footer {
+            margin-top: auto;
+            padding: 2rem;
+            color: var(--text-dim);
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🐜 HormigasAIS Bot</h1>
+        <p class="subtitle">Agentes autónomos en el borde movidos por el protocolo LBH. Ultraeficiente, soberano y de bajo consumo energético.</p>
+        <a href="https://discord.com/oauth2/authorize?client_id=1448862640540618752&permissions=19456&scope=bot%20applications.commands" class="btn-add" target="_blank">Añadir a Discord</a>
+    </header>
+
+    <section class="features">
+        <div class="card">
+            <h3>⚡ Procesamiento Edge</h3>
+            <p>Ejecutado desde nodos ligeros en el borde sin depender de grandes servidores centralizados.</p>
+        </div>
+        <div class="card">
+            <h3>📡 Protocolo LBH</h3>
+            <p>Comunicación por feromonas binarias para un intercambio de comandos veloz y seguro.</p>
+        </div>
+        <div class="card">
+            <h3>🛡️ Resiliencia y Soberanía</h3>
+            <p>Tus datos y registros de eventos permanecen en el borde bajo tu propio control.</p>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2026 HormigasAIS • Infraestructura de Inteligencia Distribuida</p>
+    </footer>
+
+
+    <!-- SECCIÓN: Especificaciones, Transparencia y Guía JSON -->
+    <section class="bot-specs" style="margin: 40px auto; max-width: 900px; padding: 25px; background: #121824; border-radius: 12px; border: 1px solid #00ff88; color: #e2e8f0; font-family: sans-serif;">
+        <h2 style="color: #00ff88; text-align: center; margin-bottom: 20px;">🐜 Especificaciones y Transparencia de "La Hormiga"</h2>
+        
+        <!-- 1. Permisos y Seguridad -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #64ffda; margin-top: 0;">🛡️ Transparencia y Permisos en tu Servidor</h3>
+            <p>Si aún no has añadido el bot y estás investigando sus capacidades, te garantizamos un diseño respetuoso con tu comunidad:</p>
+            <ul style="line-height: 1.6;">
+                <li><strong>Lo que SÍ hace:</strong> Responde a comandos <code>/</code>, notifica estados de la red y emite reportes de telemetría Edge en los canales autorizados.</li>
+                <li><strong>Lo que NO hace:</strong> No tiene permisos de Administrador Global, no altera canales, no expulsa miembros y no lee ni almacena conversaciones privadas.</li>
+                <li><strong>Soberanía:</strong> Respeta la configuración y roles preexistentes de tu servidor en todo momento.</li>
+            </ul>
+        </div>
+
+        <!-- 2. Guía de Comandos Integrados -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #64ffda; margin-top: 0;">⚡ Comandos Disponibles (Escribe / en tu servidor)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                <div><code>/ping</code>: Latencia en tiempo real.</div>
+                <div><code>/status</code>: Diagnóstico del nodo LBH.</div>
+                <div><code>/node</code>: Métricas del hardware Edge.</div>
+                <div><code>/verify &lt;hash&gt;</code>: Validación de paquetes LBH.</div>
+                <div><code>/help</code>: Guía rápida interactiva.</div>
+            </div>
+        </div>
+
+        <!-- 3. Decodificador del Mensaje JSON -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px;">
+            <h3 style="color: #64ffda; margin-top: 0;">📡 ¿Añadiste el bot y viste este mensaje JSON en tu chat?</h3>
+            <p>Si encontraste una alerta como esta y deseas entender su significado exacto, aquí tienes su desglose traducido:</p>
+            
+            <pre style="background: #0d1117; padding: 15px; border-radius: 6px; color: #a5d6ff; overflow-x: auto; border: 1px solid #30363d;">
+{
+  "event": "edge_heartbeat",
+  "origin": "node_ant_01",
+  "timestamp": 1787540765,
+  "status": "healthy",
+  "data": {
+    "cpu_load": "1.2%",
+    "memory": "256MB/3.8GB"
+  }
+}</pre>
+
+            <h4 style="color: #00ff88; margin-top: 15px;">🔍 Traduciendo la telemetría a lenguaje claro:</h4>
+            <ul style="line-height: 1.6;">
+                <li><code>"event": "edge_heartbeat"</code> — <strong>Pulso de vida:</strong> Es el "latido" del agente, confirmando que está despierto y respondiendo.</li>
+                <li><code>"origin": "node_ant_01"</code> — <strong>Identidad:</strong> Indica cuál nodo/hormiga dentro de la infraestructura emite el mensaje.</li>
+                <li><code>"timestamp"</code> — <strong>Sello de tiempo:</strong> La fecha y hora exacta del envío en estándar UNIX.</li>
+                <li><code>"status": "healthy"</code> — <strong>Salud:</strong> Estado operativo óptimo, libre de errores o bloqueos.</li>
+                <li><code>"cpu_load": "1.2%"</code> — <strong>Eficiencia:</strong> Consumo mínimo del procesador (operación ultraligera).</li>
+                <li><code>"memory": "256MB/3.8GB"</code> — <strong>Huella de memoria:</strong> Bajo uso de RAM en el dispositivo host.</li>
+            </ul>
+        </div>
+    </section>
+
+
+    <!-- SECCIÓN: ECOSISTEMA Y BOT DISCORD HORMIGASAIS -->
+    <section class="ecosystem-section" style="background-color: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 3rem 1.5rem; border-radius: 12px; border: 1px solid #30363d; max-width: 900px; margin: 2rem auto;">
+      <style>
+        .ecosystem-header { text-align: center; margin-bottom: 2.5rem; }
+        .ecosystem-title { color: #00ff88; font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .ecosystem-subtitle { color: #8b949e; font-size: 1rem; line-height: 1.5; }
+        .architecture-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        @media (min-width: 768px) { .architecture-grid { grid-template-columns: 1fr 1fr; } }
+        .arch-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; }
+        .arch-card h3 { margin-top: 0; color: #58a6ff; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .table-container { overflow-x: auto; margin-bottom: 2.5rem; }
+        .pricing-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .pricing-table th, .pricing-table td { padding: 0.75rem 1rem; border: 1px solid #30363d; }
+        .pricing-table th { background-color: #161b22; color: #00ff88; }
+        .cta-banner { background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border: 1px solid #00ff88; border-radius: 8px; padding: 2rem; text-align: center; }
+        .cta-button { display: inline-block; background-color: #00ff88; color: #0d1117; font-weight: bold; text-decoration: none; padding: 0.8rem 1.8rem; border-radius: 6px; margin-top: 1rem; transition: all 0.2s ease-in-out; }
+        .cta-button:hover { background-color: #00cc6a; transform: translateY(-2px); }
+        .badge-tag { background: #21262d; color: #8b949e; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-family: monospace; }
+      </style>
+
+      <div class="ecosystem-header">
+        <h2 class="ecosystem-title">Arquitectura del Ecosistema HormigasAIS</h2>
+        <p class="ecosystem-subtitle">
+          Integración entre la Notaría Digital LBH (Web) y la Red de Observabilidad Distribuida (Bot Discord).
+        </p>
+      </div>
+
+      <div class="architecture-grid">
+        <div class="arch-card">
+          <h3>🌐 Plataforma Web (hormigasais.com)</h3>
+          <p><strong>Entidad Certificadora Primaria</strong></p>
+          <ul style="padding-left: 20px; line-height: 1.6;">
+            <li>Sellado inmutable de propiedad intelectual.</li>
+            <li>Generación de metadatos C2PA y certificados PDF/JSON.</li>
+            <li>Custodia soberana de activos digitales pesados.</li>
+          </ul>
+        </div>
+
+        <div class="arch-card">
+          <h3>🐜 Bot Discord (La Hormiga)</h3>
+          <p><strong>Interfaz de Auditoría y Telemetría Edge</strong></p>
+          <ul style="padding-left: 20px; line-height: 1.6;">
+            <li>Monitoreo de nodos y latencia en tiempo real <span class="badge-tag">/ping</span>.</li>
+            <li>Auditoría pública de firmas LBH <span class="badge-tag">/verify</span>.</li>
+            <li>Simulación de alertas sistémicas <span class="badge-tag">/alerta</span>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="color: #f0883e; margin-bottom: 1rem;">Estructura de Consumo y Servicios</h3>
+      <div class="table-container">
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Servicio / Nivel</th>
+              <th>Plan Gratuito (Free Tier)</th>
+              <th>Plan Pro / Enterprise (Pago)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Plataforma Web</strong></td>
+              <td>Prueba de existencia criptográfica básica con límite mensual.</td>
+              <td>Sello C2PA inmutable, custodia soberana y procesamiento avanzado.</td>
+            </tr>
+            <tr>
+              <td><strong>Bot de Discord</strong></td>
+              <td>Comandos de consulta, verificación y simulaciones ilimitadas.</td>
+              <td>Modo Centinela: Auditoría e inspección automática de canales.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner">
+        <h3 style="margin-top: 0; color: #ffffff;">¿Deseas sellar y certificar tus propios archivos?</h3>
+        <p style="color: #8b949e; margin-bottom: 0.5rem;">
+          El bot de Discord audita y verifica las firmas de la red LBH. Para registrar la propiedad intelectual de tus imágenes, código o activos digitales, accede a la plataforma web oficial.
+        </p>
+        <a href="https://hormigasais.com" target="_blank" rel="noopener noreferrer" class="cta-button">
+          Ir a hormigasais.com →
+        </a>
+      </div>
+    </section>
+
+
+    <!-- SECCIÓN: Transparencia Legal, Licencia y Código Fuente -->
+    <section class="legal-section" style="background-color: #0d1117; color: #8b949e; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 2rem 1.5rem; border-radius: 12px; border: 1px solid #30363d; max-width: 900px; margin: 2rem auto; font-size: 0.9rem; line-height: 1.6;">
+      <h3 style="color: #58a6ff; margin-top: 0; text-align: center;">🛡️ Política de Privacidad, Código Auditable y Transparencia</h3>
+      <p>
+        <strong>Aviso de Integridad y Privacidad:</strong> "La Hormiga" opera bajo el principio de mínimo privilegio (Bitfield <code>19456</code>). Desactivamos intencionalmente el intent <code>message_content</code> para garantizar que el bot <strong>no lea, almacene ni procese conversaciones privadas</strong> de los usuarios.
+      </p>
+      <ul style="padding-left: 20px;">
+        <li><strong>Hash de Integridad LBH:</strong> Los identificadores mostrados corresponden a huellas de integridad calculadas vía SHA-256 para verificar consistencia de datos en el borde.</li>
+        <li><strong>Simulaciones de Laboratorio:</strong> Las alertas emitidas con <code>/alerta</code> corresponden a pruebas de estrés simuladas para validar tiempos de reacción de canales.</li>
+        <li><strong>Código Auditable:</strong> El código fuente está disponible de forma abierta para su inspección técnica.</li>
+      </ul>
+      <div style="text-align: center; margin-top: 1.5rem;">
+        <a href="https://github.com/Thrumanshow/discord-ant-bot" target="_blank" rel="noopener noreferrer" style="display: inline-block; background-color: #21262d; color: #58a6ff; font-weight: bold; text-decoration: none; padding: 0.6rem 1.2rem; border-radius: 6px; border: 1px solid #30363d;">
+          🐙 Ver Repositorio en GitHub (Thrumanshow/discord-ant-bot) →
+        </a>
+      </div>
+    </section>
+
+</body>
+</html>
