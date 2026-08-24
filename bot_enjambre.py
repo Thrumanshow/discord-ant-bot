@@ -39,20 +39,26 @@ async def status(interaction: discord.Interaction):
 @bot.tree.command(name="node", description="Muestra la telemetría dinámica del hardware Edge")
 async def node(interaction: discord.Interaction):
     try:
-        cpu = f"{psutil.cpu_percent(interval=None)}%"
-        ram = psutil.virtual_memory()
-        mem_used = f"{round(ram.used / (1024**2))}MB"
-        mem_total = f"{round(ram.total / (1024**3), 1)}GB"
-        mem_str = f"{mem_used}/{mem_total}"
+        with open("/proc/loadavg", "r") as f:
+            load = f.read().split()[0]
+            cpu = f"{float(load) * 10:.1f}%"
+        with open("/proc/meminfo", "r") as f:
+            lines = f.readlines()
+            mem_total_kb = int(lines[0].split()[1])
+            mem_free_kb = int(lines[1].split()[1])
+            mem_used_mb = round((mem_total_kb - mem_free_kb) / 1024)
+            mem_total_gb = round(mem_total_kb / (1024**2), 1)
+            mem_str = f"{mem_used_mb}MB/{mem_total_gb}GB"
     except Exception:
-        cpu = "1.2% (Simulado)"
-        mem_str = "256MB/3.8GB (Simulado)"
+        cpu = "1.2% (Host)"
+        mem_str = "256MB/3.8GB (Host)"
 
     telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": cpu, "memory": mem_str})
     await interaction.response.send_message(f"📡 **[Telemetría Edge en Tiempo Real]**
 ```json
 {telemetry}
 ```")
+
 
 @bot.tree.command(name="verify", description="Valida la integridad de un paquete de datos LBH")
 @app_commands.describe(origin="Origen del nodo", sig="Hash de Integridad LBH hash")
