@@ -162,5 +162,91 @@
         </div>
     </section>
 
+
+    <!-- SECCIÓN: ECOSISTEMA Y BOT DISCORD HORMIGASAIS -->
+    <section class="ecosystem-section" style="background-color: #0d1117; color: #e6edf3; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 3rem 1.5rem; border-radius: 12px; border: 1px solid #30363d; max-width: 900px; margin: 2rem auto;">
+      <style>
+        .ecosystem-header { text-align: center; margin-bottom: 2.5rem; }
+        .ecosystem-title { color: #00ff88; font-size: 1.8rem; margin-bottom: 0.5rem; font-weight: 700; }
+        .ecosystem-subtitle { color: #8b949e; font-size: 1rem; line-height: 1.5; }
+        .architecture-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; margin-bottom: 2.5rem; }
+        @media (min-width: 768px) { .architecture-grid { grid-template-columns: 1fr 1fr; } }
+        .arch-card { background: #161b22; border: 1px solid #30363d; border-radius: 8px; padding: 1.5rem; }
+        .arch-card h3 { margin-top: 0; color: #58a6ff; font-size: 1.2rem; display: flex; align-items: center; gap: 0.5rem; }
+        .table-container { overflow-x: auto; margin-bottom: 2.5rem; }
+        .pricing-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 0.9rem; }
+        .pricing-table th, .pricing-table td { padding: 0.75rem 1rem; border: 1px solid #30363d; }
+        .pricing-table th { background-color: #161b22; color: #00ff88; }
+        .cta-banner { background: linear-gradient(135deg, #161b22 0%, #0d1117 100%); border: 1px solid #00ff88; border-radius: 8px; padding: 2rem; text-align: center; }
+        .cta-button { display: inline-block; background-color: #00ff88; color: #0d1117; font-weight: bold; text-decoration: none; padding: 0.8rem 1.8rem; border-radius: 6px; margin-top: 1rem; transition: all 0.2s ease-in-out; }
+        .cta-button:hover { background-color: #00cc6a; transform: translateY(-2px); }
+        .badge-tag { background: #21262d; color: #8b949e; padding: 2px 6px; border-radius: 4px; font-size: 0.75rem; font-family: monospace; }
+      </style>
+
+      <div class="ecosystem-header">
+        <h2 class="ecosystem-title">Arquitectura del Ecosistema HormigasAIS</h2>
+        <p class="ecosystem-subtitle">
+          Integración entre la Notaría Digital LBH (Web) y la Red de Observabilidad Distribuida (Bot Discord).
+        </p>
+      </div>
+
+      <div class="architecture-grid">
+        <div class="arch-card">
+          <h3>🌐 Plataforma Web (hormigasais.com)</h3>
+          <p><strong>Entidad Certificadora Primaria</strong></p>
+          <ul style="padding-left: 20px; line-height: 1.6;">
+            <li>Sellado inmutable de propiedad intelectual.</li>
+            <li>Generación de metadatos C2PA y certificados PDF/JSON.</li>
+            <li>Custodia soberana de activos digitales pesados.</li>
+          </ul>
+        </div>
+
+        <div class="arch-card">
+          <h3>🐜 Bot Discord (La Hormiga)</h3>
+          <p><strong>Interfaz de Auditoría y Telemetría Edge</strong></p>
+          <ul style="padding-left: 20px; line-height: 1.6;">
+            <li>Monitoreo de nodos y latencia en tiempo real <span class="badge-tag">/ping</span>.</li>
+            <li>Auditoría pública de firmas LBH <span class="badge-tag">/verify</span>.</li>
+            <li>Simulación de alertas sistémicas <span class="badge-tag">/alerta</span>.</li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="color: #f0883e; margin-bottom: 1rem;">Estructura de Consumo y Servicios</h3>
+      <div class="table-container">
+        <table class="pricing-table">
+          <thead>
+            <tr>
+              <th>Servicio / Nivel</th>
+              <th>Plan Gratuito (Free Tier)</th>
+              <th>Plan Pro / Enterprise (Pago)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Plataforma Web</strong></td>
+              <td>Prueba de existencia criptográfica básica con límite mensual.</td>
+              <td>Sello C2PA inmutable, custodia soberana y procesamiento avanzado.</td>
+            </tr>
+            <tr>
+              <td><strong>Bot de Discord</strong></td>
+              <td>Comandos de consulta, verificación y simulaciones ilimitadas.</td>
+              <td>Modo Centinela: Auditoría e inspección automática de canales.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="cta-banner">
+        <h3 style="margin-top: 0; color: #ffffff;">¿Deseas sellar y certificar tus propios archivos?</h3>
+        <p style="color: #8b949e; margin-bottom: 0.5rem;">
+          El bot de Discord audita y verifica las firmas de la red LBH. Para registrar la propiedad intelectual de tus imágenes, código o activos digitales, accede a la plataforma web oficial.
+        </p>
+        <a href="https://hormigasais.com" target="_blank" rel="noopener noreferrer" class="cta-button">
+          Ir a hormigasais.com →
+        </a>
+      </div>
+    </section>
+
 </body>
 </html>

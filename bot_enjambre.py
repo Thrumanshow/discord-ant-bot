@@ -1,3 +1,5 @@
+import time
+import hashlib
 import os
 import discord
 from discord import app_commands
@@ -55,6 +57,44 @@ async def help_command(interaction: discord.Interaction):
         "• Código auditable en GitHub."
     )
     await interaction.response.send_message(msg, ephemeral=True)
+
+
+@bot.tree.command(name="alerta", description="Simula una alerta de emergencia Edge del sistema LBH")
+@app_commands.choices(nivel=[
+    app_commands.Choice(name="🟡 Advertencia (Warning)", value="WARNING"),
+    app_commands.Choice(name="🔴 Crítico (Critical)", value="CRITICAL"),
+])
+async def alerta(interaction: discord.Interaction, nivel: app_commands.Choice[str]):
+    timestamp = int(time.time())
+    data_raw = f"alert:{nivel.value}:{timestamp}"
+    lbh_sig = hashlib.sha256(data_raw.encode()).hexdigest()[:16]
+
+    embed = discord.Embed(
+        title=f"🚨 [ALERTA SISTÉMICA - {nivel.value}]",
+        description="Se ha detectado una anomalia en el nodo Edge simulado.",
+        color=discord.Color.gold() if nivel.value == "WARNING" else discord.Color.red()
+    )
+    embed.add_field(name="Origen", value="`node_ant_01`", inline=True)
+    embed.add_field(name="Timestamp", value=f"`{timestamp}`", inline=True)
+    embed.add_field(name="Firma LBH", value=f"`{lbh_sig}`", inline=False)
+    embed.set_footer(text="HormigasAIS • Protocolo de Resiliencia")
+
+    await interaction.response.send_message(embed=embed)
+
+
+@bot.tree.command(name="registrar", description="Instrucciones para sellar y certificar propiedad intelectual")
+async def registrar(interaction: discord.Interaction):
+    embed = discord.Embed(
+        title="🛡️ Certificación de Propiedad Intelectual LBH",
+        description=(
+            "Este bot audita firmas y telemetría de la red LBH.\n\n"
+            "Si deseas sellar criptográficamente la propiedad intelectual de tus propios archivos, imágenes o código fuente, "
+            "visita **[hormigasais.com](https://hormigasais.com)** para generar tu certificado oficial inmutable."
+        ),
+        color=0x00aaff
+    )
+    embed.set_footer(text="HormigasAIS • Infraestructura Soberana")
+    await interaction.response.send_message(embed=embed, ephemeral=True)
 
 if __name__ == "__main__":
     if TOKEN:
