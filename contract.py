@@ -1,26 +1,27 @@
-import time
 import json
 import hashlib
 
-class LBHBotContract:
-    @staticmethod
-    def emitir_feromona(origen: str, tipo_pulso: str, contenido: dict) -> str:
-        payload = {
-            "timestamp": time.time(),
-            "origin": origen,
-            "type": tipo_pulso,
-            "data": contenido,
-            "mode": "edge_termux"
-        }
-        # Trama LBH simplificada con hash de integridad
-        raw_json = json.dumps(payload, sort_keys=True)
-        sig = hashlib.sha256(raw_json.encode('utf-8')).hexdigest()[:12]
-        payload["lbh_sig"] = sig
-        return json.dumps(payload)
+def generar_feromona(event_type: str, origin: str, status: str = "healthy", data: dict = None) -> dict:
+    payload = {
+        "type": event_type,
+        "origin": origin,
+        "status": status,
+        "data": data or {}
+    }
+    serialized = json.dumps(payload, sort_keys=True)
+    hash_sig = hashlib.sha256(serialized.encode('utf-8')).hexdigest()[:16]
+    payload["lbh_sig"] = hash_sig
+    return payload
 
-    @staticmethod
-    def validar_feromona(raw_str: str) -> dict:
-        data = json.loads(raw_str)
-        if "lbh_sig" in data and "origin" in data:
-            return data
-        raise ValueError("Trama LBH inválida o no firmada")
+def validar_feromona(feromona: dict) -> bool:
+    if not isinstance(feromona, dict) or "lbh_sig" not in feromona:
+        return False
+    
+    sig_original = feromona.pop("lbh_sig", None)
+    serialized = json.dumps(feromona, sort_keys=True)
+    recalculated_sig = hashlib.sha256(serialized.encode('utf-8')).hexdigest()[:16]
+    
+    # Restaurar la firma en el diccionario
+    feromona["lbh_sig"] = sig_original
+    
+    return sig_original == recalculated_sig

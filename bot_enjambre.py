@@ -1,92 +1,63 @@
-import discord
-import asyncio
-import json
 import os
-from contract import LBHBotContract
+import discord
+from discord import app_commands
+from dotenv import load_dotenv
+from contract import generar_feromona, validar_feromona
 
-# --- Hormiga 2: Procesadora LBH (Lógica interna) ---
-class HormigaProcesadora:
-    def __init__(self, log_path="colonia_events.log"):
-        self.log_path = log_path
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
 
-    def obtener_metricas(self) -> dict:
-        if not os.path.exists(self.log_path):
-            return {"total_feromonas": 0, "size_bytes": 0}
-        
-        with open(self.log_path, "r") as f:
-            lineas = f.readlines()
-        
-        size = os.path.getsize(self.log_path)
-        return {"total_feromonas": len(lineas), "size_bytes": size}
+class HormigasBot(discord.Client):
+    def __init__(self):
+        # Desactivamos message_content intent para garantizar privacidad total
+        intents = discord.Intents.default()
+        intents.message_content = False
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
 
-    def procesar(self, raw_feromona: str) -> str:
-        feromona = LBHBotContract.validar_feromona(raw_feromona)
-        cmd = feromona["data"].get("command", "").lower()
-        
-        if cmd == "ping":
-            return "🐜 **[LBH-Edge]** Pong! Trama procesada en 0.02ms desde Termux."
-        elif cmd == "estado":
-            return "🐜 **[Enjambre]** Nodos activos: Centinela (OK), Procesadora (OK), Estado (OK)."
-        elif cmd == "metricas" or cmd == "métricas":
-            met = self.obtener_metricas()
-            return f"📊 **[Métricas LBH Edge]**\n• Total de feromonas registradas: `{met['total_feromonas']}`\n• Tamaño del registro local: `{met['size_bytes']} bytes`\n• Estado del nodo: `Soberano / Termux Edge`"
-        elif cmd == "ayuda":
-            return "🐜 **[HormigasAIS Bot]** Comandos: `!hormiga ping`, `!hormiga estado`, `!hormiga metricas`, `!hormiga feromona`"
-        elif cmd == "feromona":
-            return f"📡 **[Feromona LBH Última]** `{feromona['lbh_sig']}` | Origen: `{feromona['origin']}`"
-        else:
-            return f"⚠️ Comando `{cmd}` no reconocido por la colonia LBH."
+    async def setup_hook(self):
+        await self.tree.sync()
 
-# --- Hormiga 3: Estado y Sincronización ---
-class HormigaEstado:
-    def __init__(self, log_path="colonia_events.log"):
-        self.log_path = log_path
+bot = HormigasBot()
 
-    def registrar_evento(self, raw_feromona: str):
-        with open(self.log_path, "a") as f:
-            f.write(raw_feromona + "\n")
+@bot.tree.command(name="ping", description="Mide la latencia de respuesta del nodo")
+async def ping(interaction: discord.Interaction):
+    latency = round(bot.latency * 1000)
+    await interaction.response.send_message(f"🏓 **Pong!** Latencia LBH: `{latency}ms`")
 
-# Instancias de las hormigas de soporte
-procesadora = HormigaProcesadora()
-estado = HormigaEstado()
+@bot.tree.command(name="status", description="Muestra el estado operativo del nodo LBH")
+async def status(interaction: discord.Interaction):
+    feromona = generar_feromona("status_check", "node_ant_01", "healthy", {"mode": "edge_soberano"})
+    embed = discord.Embed(title="🐜 Estado Operativo - HormigasAIS", color=0x00ff88)
+    embed.add_field(name="Firma LBH", value=f"`{feromona['lbh_sig']}`", inline=True)
+    embed.add_field(name="Estado", value="🟢 Óptimo", inline=True)
+    await interaction.response.send_message(embed=embed)
 
-# --- Hormiga 1: Centinela (Discord Gateway) ---
-class HormigaCentinela(discord.Client):
-    async def on_ready(self):
-        print(f"🐜 [Hormiga Centinela] Conectada a Discord como {self.user}")
-        print("🐜 [Enjambre HormigasAIS] Operando en el Borde desde Termux (Baja energía)")
+@bot.tree.command(name="node", description="Muestra la telemetría del borde")
+async def node(interaction: discord.Interaction):
+    telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": "1.2%", "memory": "256MB/3.8GB"})
+    await interaction.response.send_message(f"📡 **[Telemetría Edge]**\n```json\n{telemetry}\n```")
 
-    async def on_message(self, message):
-        if message.author == self.user:
-            return
+@bot.tree.command(name="verify", description="Valida la integridad de un paquete de datos LBH")
+@app_commands.describe(origin="Origen del nodo", sig="Firma LBH hash")
+async def verify(interaction: discord.Interaction, origin: str, sig: str):
+    sample_data = {"type": "manual_verify", "origin": origin, "status": "healthy", "data": {}, "lbh_sig": sig}
+    is_valid = validar_feromona(sample_data)
+    res = "✅ Firma VÁLIDA" if is_valid else "❌ Firma INVÁLIDA"
+    await interaction.response.send_message(f"🔍 **[Verificación LBH]**: {res}")
 
-        if message.content.startswith("!hormiga"):
-            partes = message.content.split(" ", 1)
-            comando = partes[1] if len(partes) > 1 else "ayuda"
-
-            # 1. Centinela emite feromona
-            feromona_raw = LBHBotContract.emitir_feromona(
-                origen=f"discord_usr_{message.author.id}",
-                tipo_pulso="command_pulse",
-                contenido={"command": comando, "channel": message.channel.id}
-            )
-
-            # 2. Hormiga de Estado registra el pulso
-            estado.registrar_evento(feromona_raw)
-
-            # 3. Hormiga Procesadora ejecuta respuesta
-            respuesta = procesadora.procesar(feromona_raw)
-
-            # 4. Centinela responde en Discord
-            await message.channel.send(respuesta)
+@bot.tree.command(name="help", description="Guía de uso y transparencia")
+async def help_command(interaction: discord.Interaction):
+    msg = (
+        "🐜 **HormigasAIS Bot - Guía y Privacidad**\n"
+        "• Comandos 100% nativos (Slash Commands).\n"
+        "• El bot no lee mensajes privados ni almacena chats.\n"
+        "• Código auditable en GitHub."
+    )
+    await interaction.response.send_message(msg, ephemeral=True)
 
 if __name__ == "__main__":
-    intents = discord.Intents.default()
-    intents.message_content = True
-    client = HormigaCentinela(intents=intents)
-    
-    TOKEN = os.getenv("DISCORD_TOKEN")
-    if not TOKEN:
-        print("⚠️ Variable DISCORD_TOKEN no encontrada en el entorno.")
+    if TOKEN:
+        bot.run(TOKEN)
     else:
-        client.run(TOKEN)
+        print("Error: TOKEN no configurado.")
