@@ -1,4 +1,3 @@
-import psutil
 import time
 import hashlib
 import os
@@ -43,9 +42,9 @@ async def node(interaction: discord.Interaction):
             load = f.read().split()[0]
             cpu = f"{float(load) * 10:.1f}%"
         with open("/proc/meminfo", "r") as f:
-            lines = f.readlines()
-            mem_total_kb = int(lines[0].split()[1])
-            mem_free_kb = int(lines[1].split()[1])
+            mem_lines = f.readlines()
+            mem_total_kb = int(mem_lines[0].split()[1])
+            mem_free_kb = int(mem_lines[1].split()[1])
             mem_used_mb = round((mem_total_kb - mem_free_kb) / 1024)
             mem_total_gb = round(mem_total_kb / (1024**2), 1)
             mem_str = f"{mem_used_mb}MB/{mem_total_gb}GB"
@@ -54,11 +53,9 @@ async def node(interaction: discord.Interaction):
         mem_str = "256MB/3.8GB (Host)"
 
     telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": cpu, "memory": mem_str})
-    await interaction.response.send_message(f"📡 **[Telemetría Edge en Tiempo Real]**
-```json
-{telemetry}
-```")
-
+    header = "📡 **[Telemetría Edge en Tiempo Real]**"
+    msg = header + "\n```json\n" + telemetry + "\n```"
+    await interaction.response.send_message(msg)
 
 @bot.tree.command(name="verify", description="Valida la integridad de un paquete de datos LBH")
 @app_commands.describe(origin="Origen del nodo", sig="Hash de Integridad LBH hash")
