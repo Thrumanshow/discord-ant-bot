@@ -105,5 +105,62 @@
         <p>&copy; 2026 HormigasAIS • Infraestructura de Inteligencia Distribuida</p>
     </footer>
 
+
+    <!-- SECCIÓN: Especificaciones, Transparencia y Guía JSON -->
+    <section class="bot-specs" style="margin: 40px auto; max-width: 900px; padding: 25px; background: #121824; border-radius: 12px; border: 1px solid #00ff88; color: #e2e8f0; font-family: sans-serif;">
+        <h2 style="color: #00ff88; text-align: center; margin-bottom: 20px;">🐜 Especificaciones y Transparencia de "La Hormiga"</h2>
+        
+        <!-- 1. Permisos y Seguridad -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #64ffda; margin-top: 0;">🛡️ Transparencia y Permisos en tu Servidor</h3>
+            <p>Si aún no has añadido el bot y estás investigando sus capacidades, te garantizamos un diseño respetuoso con tu comunidad:</p>
+            <ul style="line-height: 1.6;">
+                <li><strong>Lo que SÍ hace:</strong> Responde a comandos <code>/</code>, notifica estados de la red y emite reportes de telemetría Edge en los canales autorizados.</li>
+                <li><strong>Lo que NO hace:</strong> No tiene permisos de Administrador Global, no altera canales, no expulsa miembros y no lee ni almacena conversaciones privadas.</li>
+                <li><strong>Soberanía:</strong> Respeta la configuración y roles preexistentes de tu servidor en todo momento.</li>
+            </ul>
+        </div>
+
+        <!-- 2. Guía de Comandos Integrados -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #64ffda; margin-top: 0;">⚡ Comandos Disponibles (Escribe / en tu servidor)</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 10px;">
+                <div><code>/ping</code>: Latencia en tiempo real.</div>
+                <div><code>/status</code>: Diagnóstico del nodo LBH.</div>
+                <div><code>/node</code>: Métricas del hardware Edge.</div>
+                <div><code>/verify &lt;hash&gt;</code>: Validación de paquetes LBH.</div>
+                <div><code>/help</code>: Guía rápida interactiva.</div>
+            </div>
+        </div>
+
+        <!-- 3. Decodificador del Mensaje JSON -->
+        <div style="background: #1a2332; padding: 20px; border-radius: 8px;">
+            <h3 style="color: #64ffda; margin-top: 0;">📡 ¿Añadiste el bot y viste este mensaje JSON en tu chat?</h3>
+            <p>Si encontraste una alerta como esta y deseas entender su significado exacto, aquí tienes su desglose traducido:</p>
+            
+            <pre style="background: #0d1117; padding: 15px; border-radius: 6px; color: #a5d6ff; overflow-x: auto; border: 1px solid #30363d;">
+{
+  "event": "edge_heartbeat",
+  "origin": "node_ant_01",
+  "timestamp": 1787540765,
+  "status": "healthy",
+  "data": {
+    "cpu_load": "1.2%",
+    "memory": "256MB/3.8GB"
+  }
+}</pre>
+
+            <h4 style="color: #00ff88; margin-top: 15px;">🔍 Traduciendo la telemetría a lenguaje claro:</h4>
+            <ul style="line-height: 1.6;">
+                <li><code>"event": "edge_heartbeat"</code> — <strong>Pulso de vida:</strong> Es el "latido" del agente, confirmando que está despierto y respondiendo.</li>
+                <li><code>"origin": "node_ant_01"</code> — <strong>Identidad:</strong> Indica cuál nodo/hormiga dentro de la infraestructura emite el mensaje.</li>
+                <li><code>"timestamp"</code> — <strong>Sello de tiempo:</strong> La fecha y hora exacta del envío en estándar UNIX.</li>
+                <li><code>"status": "healthy"</code> — <strong>Salud:</strong> Estado operativo óptimo, libre de errores o bloqueos.</li>
+                <li><code>"cpu_load": "1.2%"</code> — <strong>Eficiencia:</strong> Consumo mínimo del procesador (operación ultraligera).</li>
+                <li><code>"memory": "256MB/3.8GB"</code> — <strong>Huella de memoria:</strong> Bajo uso de RAM en el dispositivo host.</li>
+            </ul>
+        </div>
+    </section>
+
 </body>
 </html>
