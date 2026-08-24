@@ -1,3 +1,4 @@
+import psutil
 import time
 import hashlib
 import os
@@ -31,17 +32,30 @@ async def ping(interaction: discord.Interaction):
 async def status(interaction: discord.Interaction):
     feromona = generar_feromona("status_check", "node_ant_01", "healthy", {"mode": "edge_soberano"})
     embed = discord.Embed(title="🐜 Estado Operativo - HormigasAIS", color=0x00ff88)
-    embed.add_field(name="Firma LBH", value=f"`{feromona['lbh_sig']}`", inline=True)
+    embed.add_field(name="Hash de Integridad LBH", value=f"`{feromona['lbh_sig']}`", inline=True)
     embed.add_field(name="Estado", value="🟢 Óptimo", inline=True)
     await interaction.response.send_message(embed=embed)
 
-@bot.tree.command(name="node", description="Muestra la telemetría del borde")
+@bot.tree.command(name="node", description="Muestra la telemetría dinámica del hardware Edge")
 async def node(interaction: discord.Interaction):
-    telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": "1.2%", "memory": "256MB/3.8GB"})
-    await interaction.response.send_message(f"📡 **[Telemetría Edge]**\n```json\n{telemetry}\n```")
+    try:
+        cpu = f"{psutil.cpu_percent(interval=None)}%"
+        ram = psutil.virtual_memory()
+        mem_used = f"{round(ram.used / (1024**2))}MB"
+        mem_total = f"{round(ram.total / (1024**3), 1)}GB"
+        mem_str = f"{mem_used}/{mem_total}"
+    except Exception:
+        cpu = "1.2% (Simulado)"
+        mem_str = "256MB/3.8GB (Simulado)"
+
+    telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": cpu, "memory": mem_str})
+    await interaction.response.send_message(f"📡 **[Telemetría Edge en Tiempo Real]**
+```json
+{telemetry}
+```")
 
 @bot.tree.command(name="verify", description="Valida la integridad de un paquete de datos LBH")
-@app_commands.describe(origin="Origen del nodo", sig="Firma LBH hash")
+@app_commands.describe(origin="Origen del nodo", sig="Hash de Integridad LBH hash")
 async def verify(interaction: discord.Interaction, origin: str, sig: str):
     sample_data = {"type": "manual_verify", "origin": origin, "status": "healthy", "data": {}, "lbh_sig": sig}
     is_valid = validar_feromona(sample_data)
@@ -76,7 +90,7 @@ async def alerta(interaction: discord.Interaction, nivel: app_commands.Choice[st
     )
     embed.add_field(name="Origen", value="`node_ant_01`", inline=True)
     embed.add_field(name="Timestamp", value=f"`{timestamp}`", inline=True)
-    embed.add_field(name="Firma LBH", value=f"`{lbh_sig}`", inline=False)
+    embed.add_field(name="Hash de Integridad LBH", value=f"`{lbh_sig}`", inline=False)
     embed.set_footer(text="HormigasAIS • Protocolo de Resiliencia")
 
     await interaction.response.send_message(embed=embed)
