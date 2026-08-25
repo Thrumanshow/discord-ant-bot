@@ -145,6 +145,38 @@ async def registrar(interaction: discord.Interaction):
     embed.set_footer(text="HormigasAIS • Infraestructura Soberana")
     await interaction.response.send_message(embed=embed, ephemeral=True)
 
+@bot.tree.command(name="cita-status", description="Consulta el estado de una cita en barberia.hormigasais.com")
+@app_commands.describe(id_reserva="ID de la reserva (recibido al confirmar tu cita)")
+async def cita_status(interaction: discord.Interaction, id_reserva: str):
+    await interaction.response.defer()
+    url = f"https://cristhiam-barber-api.chrisquionez354.workers.dev/api/reserva/{id_reserva}"
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                data = await resp.json()
+    except Exception as e:
+        await interaction.followup.send(f"⚠️ **[Barbería HormigasAIS]**: no fue posible conectar con el nodo de reservas ({e})")
+        return
+
+    if "error" in data:
+        await interaction.followup.send(f"❌ **[Barbería HormigasAIS]**: no se encontró esa reserva.")
+        return
+
+    reserva = data.get("reserva", {})
+    estado = reserva.get("estado", "desconocido")
+    servicio = reserva.get("servicio", "desconocido")
+    fecha = reserva.get("fecha", "desconocido")
+
+    iconos = {"confirmed": "✅ Confirmada", "cancelled": "❌ Cancelada", "completed": "✨ Completada"}
+    estado_txt = iconos.get(estado, f"⏳ {estado}")
+
+    await interaction.followup.send(
+        f"💈 **[Barbería HormigasAIS]**: {estado_txt}\n"
+        f"› Servicio: `{servicio}`\n"
+        f"› Fecha: `{fecha}`"
+    )
+
 if __name__ == "__main__":
     if TOKEN:
         bot.run(TOKEN)
