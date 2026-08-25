@@ -1,7 +1,9 @@
+import json
 import time
 import hashlib
 import os
 import discord
+import aiohttp
 from discord import app_commands
 from dotenv import load_dotenv
 from contract import generar_feromona, validar_feromona
@@ -54,16 +56,46 @@ async def node(interaction: discord.Interaction):
 
     telemetry = generar_feromona("edge_heartbeat", "node_ant_01", "healthy", {"cpu_load": cpu, "memory": mem_str})
     header = "📡 **[Telemetría Edge en Tiempo Real]**"
-    msg = header + "\n```json\n" + telemetry + "\n```"
+    msg = header + "\n```json\n" + json.dumps(telemetry, indent=2) + "\n```"
     await interaction.response.send_message(msg)
 
-@bot.tree.command(name="verify", description="Valida la integridad de un paquete de datos LBH")
-@app_commands.describe(origin="Origen del nodo", sig="Hash de Integridad LBH hash")
-async def verify(interaction: discord.Interaction, origin: str, sig: str):
-    sample_data = {"type": "manual_verify", "origin": origin, "status": "healthy", "data": {}, "lbh_sig": sig}
-    is_valid = validar_feromona(sample_data)
-    res = "✅ Firma VÁLIDA" if is_valid else "❌ Firma INVÁLIDA"
-    await interaction.response.send_message(f"🔍 **[Verificación LBH]**: {res}")
+@bot.tree.command(name="verify", description="Verifica un sello LBH real contra hormigasais.com")
+@app_commands.describe(sig="Firma del sello, ej. CLHQ-XXXXXXXX")
+async def verify(interaction: discord.Interaction, sig: str):
+    await interaction.response.defer()
+    url = f"https://api.hormigasais.com/seal/{sig}"
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                data = await resp.json()
+    except Exception as e:
+        await interaction.followup.send(f"⚠️ **[Verificación LBH]**: no fue posible consultar el nodo ({e})")
+        return
+
+    if "error" in data:
+        await interaction.followup.send(f"❌ **[Verificación LBH]**: sello `{sig}` no encontrado.")
+        return
+
+    sello = data.get("sello", {})
+    hash_valido = sello.get("hash_valido", False)
+    owner = sello.get("owner", "desconocido")
+    asset = sello.get("asset", "desconocido")
+    plan = sello.get("plan", "desconocido")
+    valido_hasta = sello.get("valido_hasta", "desconocido")
+
+    if hash_valido:
+        estado = "✅ Sello VÁLIDO"
+    else:
+        estado = "⚠️ Sello existente, pero hash no verificado"
+
+    await interaction.followup.send(
+        f"🔍 **[Verificación LBH]**: {estado}\n"
+        f"› Propietario: `{owner}`\n"
+        f"› Activo: `{asset}`\n"
+        f"› Plan: `{plan}`\n"
+        f"› Válido hasta: `{valido_hasta}`"
+    )
 
 @bot.tree.command(name="help", description="Guía de uso y transparencia")
 async def help_command(interaction: discord.Interaction):
