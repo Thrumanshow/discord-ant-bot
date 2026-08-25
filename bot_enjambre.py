@@ -177,6 +177,35 @@ async def cita_status(interaction: discord.Interaction, id_reserva: str):
         f"› Fecha: `{fecha}`"
     )
 
+@bot.tree.command(name="citas-registradas", description="Muestra las últimas citas registradas en la barbería con sus IDs")
+async def citas_registradas(interaction: discord.Interaction):
+    await interaction.response.defer()
+    url = "https://cristhiam-barber-api.chrisquionez354.workers.dev/api/reservas"
+
+    try:
+        async with aiohttp.ClientSession() as session:
+            async with session.get(url, timeout=aiohttp.ClientTimeout(total=8)) as resp:
+                data = await resp.json()
+    except Exception as e:
+        await interaction.followup.send(f"⚠️ **[Barbería HormigasAIS]**: Error al conectar con el nodo ({e})")
+        return
+
+    if "error" in data or not data.get("reservas"):
+        await interaction.followup.send("❌ **[Barbería HormigasAIS]**: No se encontraron registros de citas.")
+        return
+
+    reservas = data.get("reservas", [])
+    msg = "💈 **Últimas Citas Registradas**:\n"
+    for r in reservas:
+        rid = r.get("id", "N/A")
+        serv = r.get("servicio", "N/A")
+        fec = r.get("fecha", "N/A")
+        est = r.get("estado", "N/A")
+        msg += f"• `{rid}` | **{serv}** | {fec} | `{est}`\n"
+    
+    msg += "\n*(Copia el UUID completo y usa /cita-status con el ID)*"
+    await interaction.followup.send(msg)
+
 if __name__ == "__main__":
     if TOKEN:
         bot.run(TOKEN)
